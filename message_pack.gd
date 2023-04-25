@@ -22,7 +22,7 @@ static func encode(value):
 		}
 	else:
 		return {
-			result = PoolByteArray(),
+			result = PackedByteArray(),
 			error = ctx.error,
 			error_string = ctx.error_string,
 		}
@@ -71,12 +71,12 @@ static func _encode(buf, value, ctx):
 				buf.put_u8(0xd3)
 				buf.put_64(value)
 
-		TYPE_REAL:
+		TYPE_FLOAT:
 			buf.put_u8(0xca)
 			buf.put_float(value)
 
 		TYPE_STRING:
-			var bytes = value.to_utf8()
+			var bytes = value.to_utf8_buffer()
 
 			var size = bytes.size()
 			if size <= (1 << 5) - 1:
@@ -99,7 +99,7 @@ static func _encode(buf, value, ctx):
 
 			buf.put_data(bytes)
 
-		TYPE_RAW_ARRAY:
+		TYPE_PACKED_BYTE_ARRAY:
 			var size = value.size()
 			if size <= (1 << 8) - 1:
 				buf.put_u8(0xc4)
