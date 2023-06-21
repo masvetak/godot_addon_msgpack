@@ -47,13 +47,13 @@ static func _encode(buf, value, ctx):
 	match typeof(value):
 		TYPE_NIL:
 			buf.put_u8(0xc0)
-
+		
 		TYPE_BOOL:
 			if value:
 				buf.put_u8(0xc3)
 			else:
 				buf.put_u8(0xc2)
-
+		
 		TYPE_INT:
 			if -(1 << 5) <= value and value <= (1 << 7) - 1:
 				# fixnum (positive and negative)
@@ -70,14 +70,14 @@ static func _encode(buf, value, ctx):
 			else:
 				buf.put_u8(0xd3)
 				buf.put_64(value)
-
+		
 		TYPE_FLOAT:
 			buf.put_u8(0xca)
 			buf.put_float(value)
-
+		
 		TYPE_STRING:
 			var bytes = value.to_utf8_buffer()
-
+			
 			var size = bytes.size()
 			if size <= (1 << 5) - 1:
 				# type fixstr [101XXXXX]
@@ -95,10 +95,11 @@ static func _encode(buf, value, ctx):
 				buf.put_u8(0xdb)
 				buf.put_u32(size)
 			else:
+				@warning_ignore("assert_always_false")
 				assert(false)
-
+			
 			buf.put_data(bytes)
-
+		
 		TYPE_PACKED_BYTE_ARRAY:
 			var size = value.size()
 			if size <= (1 << 8) - 1:
@@ -111,8 +112,9 @@ static func _encode(buf, value, ctx):
 				buf.put_u8(0xc6)
 				buf.put_u32(size)
 			else:
+				@warning_ignore("assert_always_false")
 				assert(false)
-
+			
 			buf.put_data(value)
 
 		TYPE_ARRAY:
@@ -129,8 +131,8 @@ static func _encode(buf, value, ctx):
 				buf.put_u8(0xdd)
 				buf.put_u32(size)
 			else:
+				@warning_ignore("assert_always_false")
 				assert(false)
-
 			for obj in value:
 				_encode(buf, obj, ctx)
 				if ctx.error != OK:
@@ -150,13 +152,14 @@ static func _encode(buf, value, ctx):
 				buf.put_u8(0xdf)
 				buf.put_u32(size)
 			else:
+				@warning_ignore("assert_always_false")
 				assert(false)
-
+			
 			for key in value:
 				_encode(buf, key, ctx)
 				if ctx.error != OK:
 					return
-
+				
 				_encode(buf, value[key], ctx)
 				if ctx.error != OK:
 					return
