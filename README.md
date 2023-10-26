@@ -1,1 +1,1 @@
-# godot_lib_message_pack
+# godot_addon_msgpack
