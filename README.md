@@ -20,11 +20,11 @@ result = Msgpack.unpack(data)
 ### Example
 ```gdscript
 class MsgpackDataSerializer:
-    func serialize(data: Dictionary):
-        return Msgpack.pack(data)
+	func serialize(data: Dictionary):
+		return Msgpack.pack(data)
 
-    func deserialize(data: PackedByteArray):
-        return Msgpack.unpack(data)
+	func deserialize(data: PackedByteArray):
+		return Msgpack.unpack(data)
 ```
 
 
@@ -53,5 +53,3 @@ Distributed under the MIT License. See [LICENSE](LICENSE.md) for more informatio
 Marko Švetak
 - Email: masvetak@gmail.com
 - Facebook: facebook.com/masvetak
-
-
